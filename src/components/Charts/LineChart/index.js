@@ -18,7 +18,7 @@ const generateOptions = (data) => {
         categories: categories,
         crosshair: true,
         },
-        colors: ['#F3585B'],
+        
         yAxis: {
         min: 0,
         title: {
@@ -46,7 +46,13 @@ const generateOptions = (data) => {
         series: [
         {
             name: 'Total cases',
-            data: data.map((item) => item.Confirmed),
+            color: '#F3585B',
+            data: data.map((item) => item.Confirmed)
+        },
+        {
+            name: 'Total deaths',
+            color: 'gray',
+            data: data.map((item) => item.Deaths)
         },
         ],
     };
