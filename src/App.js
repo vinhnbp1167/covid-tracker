@@ -3,7 +3,6 @@ import { sortBy } from 'lodash';
 import CountrySelector from './components/CountrySelector';
 import { getCountries, getReportByCountry } from './components/apis';
 import Summary from './components/Summary';
-import Highlight from './components/Highlight';
 import { Container, Grid, Typography } from '@material-ui/core';
 import '@fontsource/roboto';
 import moment from 'moment';
