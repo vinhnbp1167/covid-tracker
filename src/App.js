@@ -58,7 +58,7 @@ const App = () => {
           type: 'recovered',
         },
         {
-          title: 'Death',
+          title: 'Fatal',
           count: latestData.Deaths,
           type: 'death',
         },
