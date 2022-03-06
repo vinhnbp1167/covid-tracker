@@ -7,13 +7,22 @@ import { Container, Grid, Typography } from '@material-ui/core';
 import '@fontsource/roboto';
 import moment from 'moment';
 import HighlightCard from './components/Highlight/HighlightCard';
+import { useBetween } from "use-between";
 
 moment.locale('en-US');
+
+export const useShareableState = () => {
+  const [report, setReport] = React.useState([]);
+  return {
+    report,
+    setReport
+  };
+};
 
 const App = () => {
   const [countries, setCountries] = React.useState([]);
   const [selectedCountryId, setSelectedCountryId] = React.useState('');
-  const [report, setReport] = React.useState([]);
+  const { report, setReport } = useBetween(useShareableState);
   const [casesType, setCasesType] = useState("infected");
 
   useEffect(() => {
@@ -37,8 +46,9 @@ const App = () => {
       getReportByCountry(selectedCountry.Slug).then((res) => {
         console.log('getReportByCountry', { res });
         // remove last item = current date
-        res.data.pop();
-        setReport(res.data);
+        if (res.data && res.data.length > 0) {
+          setReport(res.data);
+        }
       });
     }
   }, [selectedCountryId, countries]);
@@ -74,13 +84,14 @@ const App = () => {
       </Typography>
       <Typography>{moment().format('LLL')}</Typography>
       <CountrySelector
+        className="country-dropdown"
         handleOnChange={handleOnChange}
         countries={countries}
         value={selectedCountryId}
       />
       <Grid container spacing={3}>
-        {summary.map((data) => (
-          <Grid item sm={4} xs={12}>
+        {summary.map((data, index) => (
+          <Grid item sm={4} xs={12} key={index}>
             <HighlightCard
               onClick={(e) => setCasesType(data.type)}
               title={data.title}

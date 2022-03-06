@@ -3,7 +3,7 @@ import React from 'react'
 
 function CountrySelector({ value, handleOnChange, countries }) {
   return <FormControl>
-      <InputLabel htmLFor="" shrink >
+      <InputLabel htmlFor="" shrink >
         Country
       </InputLabel>
       <NativeSelect
@@ -16,7 +16,7 @@ function CountrySelector({ value, handleOnChange, countries }) {
             {
                 countries.map((country) => {
                     return (
-                        <option value={country.ISO2.toLowerCase()}>
+                        <option key={country.ISO2.toLowerCase()} value={country.ISO2.toLowerCase()} data-slug={country.Slug}>
                             {country.Country}
                         </option>
                     )

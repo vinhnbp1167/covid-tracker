@@ -4,50 +4,75 @@ import HighchartsReact from 'highcharts-react-official';
 import highchartsMap from 'highcharts/modules/map';
 import { cloneDeep } from 'lodash';
 import usAll from "./usAll";
+import { getReportByProvince } from '../../apis';
+import { useBetween } from "use-between";
+import { useShareableState } from '../../../App';
 
 // Load Highcharts modules
 highchartsMap(Highcharts);
 
-const initOptions = {
-  chart: {
-    height: '500',
-  },
-  title: {
-    text: null,
-  },
-  mapNavigation: {
-    enabled: true,
-  },
-  colorAxis: {
-    min: 0,
-    stops: [
-      [0.2, '#FFC4AA'],
-      [0.4, '#FF8A66'],
-      [0.6, '#FF392B'],
-      [0.8, '#B71525'],
-      [1, '	#7A0826'],
-    ],
-  },
-  legend: {
-    layout: 'vertical',
-    align: 'right',
-    verticalAlign: 'bottom',
-  },
-  series: [
-    {
-      
-      name: 'Population',
-      mapData: usAll,
-      joinBy: ['hc-key', 'key'],
-      
-    },
-  ],
-};
+
+
 
 const HighMaps = ({ mapData, casesType }) => {
   const [options, setOptions] = useState({});
   const [mapLoaded, setMapLoaded] = useState(false);
+  const { report, setReport } = useBetween(useShareableState);
   const chartRef = useRef(null);
+
+  const initOptions = {
+    chart: {
+      height: '500',
+    },
+    title: {
+      text: null,
+    },
+    mapNavigation: {
+      enabled: true,
+    },
+    colorAxis: {
+      min: 0,
+      stops: [
+        [0.2, '#FFC4AA'],
+        [0.4, '#FF8A66'],
+        [0.6, '#FF392B'],
+        [0.8, '#B71525'],
+        [1, '	#7A0826'],
+      ],
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'bottom',
+    },
+    series: [
+      {
+
+        name: 'Population',
+        mapData: usAll,
+        joinBy: ['hc-key', 'key'],
+        cursor: 'pointer',
+        point: {
+          events: {
+            click: function () {
+              let countryDropDown = document.querySelector('#country-selector');
+              let country = countryDropDown.options[countryDropDown.selectedIndex];
+              let countrySlug = country.getAttribute('data-slug');
+              let province = this.name;
+              getReportByProvince(countrySlug, encodeURIComponent(province)).then((res) => {
+                console.log('getReportByProvince', { res });
+                // remove last item = current date
+                if (res.data && res.data.length > 0) {
+                  setReport(res.data);
+                }
+              });
+            }
+          }
+        }
+
+      },
+    ],
+  };
 
   useEffect(() => {
     if (mapData && Object.keys(mapData).length) {
