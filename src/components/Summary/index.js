@@ -5,7 +5,7 @@ import { getMapDataByCountryId } from '../apis';
 import LineChart from '../Charts/LineChart';
 import HighMaps from '../Charts/HighMaps';
 
-export default function Summary({ countryId, report }) {
+export default function Summary({ countryId, report, casesType }) {
   const [mapData, setMapData] = useState({});
 
   useEffect(() => {
@@ -13,6 +13,7 @@ export default function Summary({ countryId, report }) {
       getMapDataByCountryId(countryId)
         .then((res) => {
           setMapData(res);
+          console.log('getMapDataByCountry', { res });
         })
         .catch((err) => console.log({ err }));
     }
@@ -22,7 +23,7 @@ export default function Summary({ countryId, report }) {
     <div style={{ height: '500px', marginTop: 10 }}>
       <Grid container spacing={3}>
         <Grid item sm={8} xs={12}>
-          <LineChart data={report} />
+          <LineChart data={report} casesType={casesType}/>
         </Grid>
         <Grid item sm={4} xs={12}>
           <HighMaps mapData={mapData} />

@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { sortBy } from 'lodash';
 import CountrySelector from './components/CountrySelector';
 import { getCountries, getReportByCountry } from './components/apis';
 import Summary from './components/Summary';
 import Highlight from './components/Highlight';
-import { Container, Typography } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 import '@fontsource/roboto';
 import moment from 'moment';
+import HighlightCard from './components/Highlight/HighlightCard';
 
 moment.locale('en-US');
 
@@ -14,6 +15,7 @@ const App = () => {
   const [countries, setCountries] = React.useState([]);
   const [selectedCountryId, setSelectedCountryId] = React.useState('');
   const [report, setReport] = React.useState([]);
+  const [casesType, setCasesType] = useState("infected");
 
   useEffect(() => {
     getCountries().then((res) => {
@@ -49,7 +51,7 @@ const App = () => {
         {
           title: 'Infected',
           count: latestData.Confirmed,
-          type: 'confirmed',
+          type: 'infected',
         },
         {
           title: 'Recovered',
@@ -77,8 +79,20 @@ const App = () => {
         countries={countries}
         value={selectedCountryId}
       />
-      <Highlight summary={summary} />
-      <Summary countryId={selectedCountryId} report={report} />
+      <Grid container spacing={3}>
+      {summary.map((data) => (
+        <Grid item sm={4} xs={12}>
+          <HighlightCard
+            onClick={(e) => setCasesType(data.type)}
+            title={data.title}
+            active={casesType === data.type}
+            count={data.count}
+            type={data.type}
+          />
+        </Grid>
+      ))}
+    </Grid>
+      <Summary countryId={selectedCountryId} report={report} casesType={casesType} />
     </Container>
   );
 };
