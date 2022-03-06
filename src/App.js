@@ -79,18 +79,18 @@ const App = () => {
         value={selectedCountryId}
       />
       <Grid container spacing={3}>
-      {summary.map((data) => (
-        <Grid item sm={4} xs={12}>
-          <HighlightCard
-            onClick={(e) => setCasesType(data.type)}
-            title={data.title}
-            active={casesType === data.type}
-            count={data.count}
-            type={data.type}
-          />
-        </Grid>
-      ))}
-    </Grid>
+        {summary.map((data) => (
+          <Grid item sm={4} xs={12}>
+            <HighlightCard
+              onClick={(e) => setCasesType(data.type)}
+              title={data.title}
+              active={casesType === data.type}
+              count={data.count}
+              type={data.type}
+            />
+          </Grid>
+        ))}
+      </Grid>
       <Summary countryId={selectedCountryId} report={report} casesType={casesType} />
     </Container>
   );

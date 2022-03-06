@@ -26,7 +26,7 @@ export default function Summary({ countryId, report, casesType }) {
           <LineChart data={report} casesType={casesType}/>
         </Grid>
         <Grid item sm={4} xs={12}>
-          <HighMaps mapData={mapData} />
+          <HighMaps mapData={mapData} casesType={casesType} />
         </Grid>
       </Grid>
     </div>
